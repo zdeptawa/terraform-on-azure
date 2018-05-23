@@ -1,5 +1,5 @@
 # This is an example of a basic Terraform configuration file that sets up a new demo resource group,
-# and creates a new demo network with a web server in a public subnet.
+# and creates a new demo network with a web server in a public subnet behind a load balancer.
 
 # What credentials are needed to configure the AzureRM provider?
 ## subscription_id
