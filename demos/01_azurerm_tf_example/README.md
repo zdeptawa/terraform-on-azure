@@ -1,4 +1,4 @@
-# terraform-on-azure - Demo 01
+# terraform-on-azure - demo01
 Very basic sample Terraform configuration using the AzureRM Terraform Provider. 
 
 # Prerequisites
@@ -9,14 +9,12 @@ You will also need Terraform installed on your system. If you don't yet have Ter
 # Usage
 To use/test this code, do the following:
 
-```markdown
 1. Clone this repository
 2. Change directory to this demo folder
 3. Configure your Azure Authentication information (client_id, client_secret, tenant_id, subscription_id) via Terraform variables or - the preferred method - environment variables.
 4. Run `terraform init` to initialize the Terraform environment in this directory and pull down required providers and modules.
 5. Run `terraform plan` to plan the changes and build the dependency graphs required. This will also allow you to see what changes will occur before applying.
 6. **ONLY IF ALL LOOKS WELL ON THE PLAN**, run `terraform apply` to apply your changes.
-```
 
 # More Information
 Docs on Terraform.io -> [https://www.terraform.io/docs/providers/azurerm/](https://www.terraform.io/docs/providers/azurerm/)
