@@ -1,18 +1,7 @@
 # This is an example of a basic Terraform configuration file that sets up a new demo resource group,
 # and creates a new demo network with a public and private subnet.
 
-# What credentials are needed to configure the AzureRM provider?
-## subscription_id
-# The subscription ID to use. It can also be sourced from the ARM_SUBSCRIPTION_ID environment variable.
-
-## client_id
-# The client ID to use. It can also be sourced from the ARM_CLIENT_ID environment variable.
-
-## client_secret
-# The client secret to use. It can also be sourced from the ARM_CLIENT_SECRET environment variable.
-
-## tenant_id
-# The tenant ID to use. It can also be sourced from the ARM_TENANT_ID environment variable.
+# IMPORTANT: Make sure subscription_id, client_id, client_secret, and tenant_id are configured!
 
 # Configure the Azure Provider
 provider "azurerm" {}
