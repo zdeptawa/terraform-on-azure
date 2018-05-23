@@ -29,29 +29,30 @@ resource "azurerm_resource_group" "demo05_resource_group" {
   }
 }
 
+/*
 # Create a virtual network within the resource group
-#resource "azurerm_virtual_network" "demo05_network" {
-#  name                = "demo05_network"
-#  address_space       = ["10.0.0.0/16"]
-#  location            = "${azurerm_resource_group.demo05_resource_group.location}"
-#  resource_group_name = "${azurerm_resource_group.demo05_resource_group.name}"
-#
-#  subnet {
-#    name           = "demo05_public_subnet"
-#    address_prefix = "10.0.1.0/24"
-#  }
-#
-#  subnet {
-#    name           = "demo05_private_subnet"
-#    address_prefix = "10.0.2.0/24"
-#  }
-#
-#  tags {
-#    environment = "demo"
-#    build       = "demo05"
-#  }
-#}
+resource "azurerm_virtual_network" "demo05_network" {
+  name                = "demo05_network"
+  address_space       = ["10.0.0.0/16"]
+  location            = "${azurerm_resource_group.demo05_resource_group.location}"
+  resource_group_name = "${azurerm_resource_group.demo05_resource_group.name}"
 
+  subnet {
+    name           = "demo05_public_subnet"
+    address_prefix = "10.0.1.0/24"
+  }
+
+  subnet {
+    name           = "demo05_private_subnet"
+    address_prefix = "10.0.2.0/24"
+  }
+
+  tags {
+    environment = "demo"
+    build       = "demo05"
+  }
+}
+*/
 module "network" "demo05_network" {
   source              = "Azure/network/azurerm"
   resource_group_name = "${azurerm_resource_group.demo05_resource_group.name}"
@@ -99,6 +100,7 @@ resource "azurerm_network_security_group" "demo05_public_security_group" {
   }
 }
 
+/*
 resource "azurerm_network_interface" "demo05_network_interface" {
   name                      = "demo05_network_interface"
   location                  = "${azurerm_resource_group.demo05_resource_group.location}"
@@ -158,7 +160,7 @@ resource "azurerm_virtual_machine" "demo05_web01" {
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
-
+ 
   storage_data_disk {
     name            = "${azurerm_managed_disk.demo05_managed_disk.name}"
     managed_disk_id = "${azurerm_managed_disk.demo05_managed_disk.id}"
@@ -202,7 +204,7 @@ SETTINGS
     environment = "demo"
     build       = "demo05"
   }
-}
+} */
 
 module "loadbalancer" "demo05_load_balancer" {
   source              = "Azure/loadbalancer/azurerm"
@@ -211,7 +213,7 @@ module "loadbalancer" "demo05_load_balancer" {
   prefix              = "demo05"
 
   lb_port = {
-    http = ["80", "Tcp", "80"]
+    http = ["80", "Tcp", "8080"]
   }
 
   frontend_name = "demo05-public-vip"
@@ -220,4 +222,31 @@ module "loadbalancer" "demo05_load_balancer" {
     environment = "demo"
     build       = "demo05"
   }
+}
+
+module "computegroup" "demo05_computegroup" {
+  source                                 = "Azure/computegroup/azurerm"
+  vmscaleset_name                        = "demo05_vmscaleset"
+  resource_group_name                    = "${azurerm_resource_group.demo05_resource_group.name}"
+  location                               = "${azurerm_resource_group.demo05_resource_group.location}"
+  vm_size                                = "Standard_B1S"
+  admin_username                         = "azureuser"
+  admin_password                         = "BestPasswordEver"
+  ssh_key                                = "~/.ssh/id_rsa.pub"
+  nb_instance                            = 3
+  vnet_subnet_id                         = "${module.network.vnet_subnets[0]}"
+  load_balancer_backend_address_pool_ids = "${module.loadbalancer.azurerm_lb_backend_address_pool_id}"
+
+  #vm_os_simple                           = "UbuntuServer"
+
+  # Using the custom packer-todo-demo image I created from the 'demo_image.json' file using Packer
+  vm_os_id = "/subscriptions/d7e02429-9aef-419e-b1e3-a9ca66b40864/resourceGroups/PACKERDEMO/providers/Microsoft.Compute/images/packer-todo-demo"
+  tags = {
+    environment = "demo"
+    build       = "demo05"
+  }
+}
+
+output "azurerm_public_ip_address" {
+  value = "${module.loadbalancer.azurerm_public_ip_address}"
 }
