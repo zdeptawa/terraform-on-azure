@@ -1,0 +1,55 @@
+{
+  "variables": {
+    "my_client_id": "{{env `PACKER_VAR_client_id`}}",
+    "my_client_secret": "{{env `PACKER_VAR_client_secret`}}",
+    "my_subscription_id": "{{env `PACKER_VAR_subscription_id`}}",
+    "my_tenant_id": "{{env `PACKER_VAR_tenant_id`}}",
+    "my_object_id": "{{env `PACKER_VAR_object_id`}}"
+  },
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "{{user `my_client_id`}}",
+    "client_secret": "{{user `my_client_secret`}}",
+    "subscription_id": "{{user `my_subscription_id`}}",
+    "tenant_id": "{{user `my_tenant_id`}}",
+    "managed_image_resource_group_name": "packerdemo",
+    "managed_image_name": "packer-todo-demo",
+
+    "os_type": "Linux",
+    "image_publisher": "Canonical",
+    "image_offer": "UbuntuServer",
+    "image_sku": "16.04-LTS",
+
+    "azure_tags": {
+      "environment": "demo",
+      "build": "demo05"
+    },
+
+    "location": "westus2",
+    "vm_size": "Standard_B1S"
+  }],
+  "provisioners": [
+  {
+    "type": "file",
+    "source": "TodoDemo-0.0.1-SNAPSHOT.war",
+    "destination": "/TodoDemo-0.0.1-SNAPSHOT.war"
+  },
+  {
+    "type": "file",
+    "source": "rc.local.new",
+    "destination": "/etc/rc.local"
+  },
+  {
+    "type": "shell",
+    "inline": [
+        "sudo apt-get update -y",
+        "sudo apt-get install -y openjdk-8*",
+        "sudo mkdir /src",
+        "sudo mv /TodoDemo-0.0.1-SNAPSHOT.war /src/TodoDemo-0.0.1-SNAPSHOT.war",
+        "sudo chmod +x /src/TodoDemo-0.0.1-SNAPSHOT.war",
+        "sudo chmod 750 /etc/rc.local",
+        "sudo systemctl enable rc-local.service"
+    ]
+  }]
+}
