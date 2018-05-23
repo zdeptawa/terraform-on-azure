@@ -32,13 +32,8 @@
   "provisioners": [
   {
     "type": "file",
-    "source": "TodoDemo-0.0.1-SNAPSHOT.war",
-    "destination": "/TodoDemo-0.0.1-SNAPSHOT.war"
-  },
-  {
-    "type": "file",
     "source": "rc.local.new",
-    "destination": "/etc/rc.local"
+    "destination": "/tmp/rc.local"
   },
   {
     "type": "shell",
@@ -46,8 +41,9 @@
         "sudo apt-get update -y",
         "sudo apt-get install -y openjdk-8*",
         "sudo mkdir /src",
-        "sudo mv /TodoDemo-0.0.1-SNAPSHOT.war /src/TodoDemo-0.0.1-SNAPSHOT.war",
+        "sudo wget -O /src/TodoDemo-0.0.1-SNAPSHOT.war https://github.com/zdeptawa/terraform-on-azure/raw/master/demos/05_packer_vmss_demo/TodoDemo-0.0.1-SNAPSHOT.war",
         "sudo chmod +x /src/TodoDemo-0.0.1-SNAPSHOT.war",
+        "sudo mv /tmp/rc.local /etc/rc.local",
         "sudo chmod 750 /etc/rc.local",
         "sudo systemctl enable rc-local.service"
     ]
