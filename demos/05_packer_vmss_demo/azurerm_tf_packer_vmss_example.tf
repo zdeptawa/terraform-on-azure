@@ -96,7 +96,7 @@ module "computegroup" "demo05_computegroup" {
   admin_username                         = "azureuser"
   admin_password                         = "BestPasswordEver"
   ssh_key                                = "~/.ssh/id_rsa.pub"
-  nb_instance                            = 4
+  nb_instance                            = 3
   vnet_subnet_id                         = "${module.network.vnet_subnets[0]}"
   load_balancer_backend_address_pool_ids = "${module.loadbalancer.azurerm_lb_backend_address_pool_id}"
 
