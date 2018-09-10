@@ -1,7 +1,7 @@
 # terraform-on-azure - demo08
-# Deploying a Pod to an Azure Kubernetes Service (AKS) Cluster using Terraform
-Very basic sample Terraform configuration using the Kubernetes Terraform Provider to deploy a
-Kubernetes Pod to a running Azure Kubernetes Service (AKS) Cluster.
+# Deploying an Azure Function using Terraform
+Very basic sample Terraform configuration using the AzureRM Provider to deploy an Azure
+Function.
 
 # Prerequisites
 Before you can use this code, you'll need to gather and configure your Azure Authentication info(`client_id`, `client_secret`, `tenant_id`, `subscription_id`). While you can use your own personal authentication information, it is suggested that you use an Azure Service Principal instead. [How to create a Service Principal for use with Terraform can be found here](https://www.terraform.io/docs/providers/azurerm/authenticating_via_service_principal.html). 
