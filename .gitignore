@@ -4,3 +4,8 @@
 
 # Module directory
 .terraform/
+
+# Terraform Plan output
+out.plan
+run.plan
+*.plan
