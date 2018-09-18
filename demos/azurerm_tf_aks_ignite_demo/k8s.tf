@@ -3,8 +3,8 @@ resource "azurerm_resource_group" "k8s" {
   location = "${var.location}"
 
   tags {
-    Environment = "Development"
-    build       = "ignite"
+    Environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
@@ -36,7 +36,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   }
 
   tags {
-    Environment = "Development"
-    build       = "ignite"
+    Environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }

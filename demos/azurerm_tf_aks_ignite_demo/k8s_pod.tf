@@ -11,9 +11,7 @@ provider "kubernetes" {
 
 resource "kubernetes_pod" "ignite-pod" {
   metadata {
-    name = "terraform-example"
-
-    #name = "ignite-k8s-nginx-pod"
+    name = "ignite-k8s-nginx-pod"
   }
 
   spec {
@@ -22,9 +20,14 @@ resource "kubernetes_pod" "ignite-pod" {
       name  = "example"
     }
   }
+
+  tags {
+    Environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
+  }
 }
 
-resource "kubernetes_service" "web" {
+resource "kubernetes_service" "ignite-web" {
   metadata {
     name = "ignite-k8s-nginx-service"
   }
@@ -42,5 +45,10 @@ resource "kubernetes_service" "web" {
     }
 
     type = "LoadBalancer"
+  }
+
+  tags {
+    Environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }

@@ -6,6 +6,14 @@ variable "client_secret" {
   default = ""
 }
 
+variable "environment_tag" {
+  default = "development"
+}
+
+variable "build_tag" {
+  default = "ignite"
+}
+
 variable "agent_count" {
   default = 3
 }
