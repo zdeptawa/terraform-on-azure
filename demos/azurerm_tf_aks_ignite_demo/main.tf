@@ -5,5 +5,5 @@ provider "azurerm" {
 
 # Configuring the backend
 terraform {
-  backend "azurerm" {}
+  backend "${var.terraform_backend}" {}
 }
