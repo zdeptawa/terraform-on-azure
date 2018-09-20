@@ -1,14 +1,16 @@
+# Set up the provider for k8s
 provider "kubernetes" {
   host = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
 
   #username               = "${azurerm_kubernetes_cluster.k8s.kube_config.0.username}"
   #password               = "${azurerm_kubernetes_cluster.k8s.kube_config.0.password}"
-  client_certificate = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_certificate)}"
 
+  client_certificate     = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_certificate)}"
   client_key             = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_key)}"
   cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.cluster_ca_certificate)}"
 }
 
+# Create the k8s nginx pod
 resource "kubernetes_pod" "ignite-pod" {
   metadata {
     name = "ignite-k8s-nginx-pod"
@@ -20,13 +22,9 @@ resource "kubernetes_pod" "ignite-pod" {
       name  = "example"
     }
   }
-
-  tags {
-    Environment = "${var.environment_tag}"
-    build       = "${var.build_tag}"
-  }
 }
 
+# Create the k8s nginx web service
 resource "kubernetes_service" "ignite-web" {
   metadata {
     name = "ignite-k8s-nginx-service"
@@ -45,10 +43,5 @@ resource "kubernetes_service" "ignite-web" {
     }
 
     type = "LoadBalancer"
-  }
-
-  tags {
-    Environment = "${var.environment_tag}"
-    build       = "${var.build_tag}"
   }
 }
