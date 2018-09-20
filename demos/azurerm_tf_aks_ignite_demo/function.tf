@@ -23,7 +23,7 @@ resource "azurerm_storage_account" "function" {
 
 # Create a new service plan for our function app
 resource "azurerm_app_service_plan" "function" {
-  name                = "ignite-tf-function-service-plan"
+  name                = "ignite-demo-function-service-plan"
   location            = "${azurerm_resource_group.k8s.location}"
   resource_group_name = "${azurerm_resource_group.k8s.name}"
   kind                = "FunctionApp"
@@ -41,7 +41,7 @@ resource "azurerm_app_service_plan" "function" {
 
 # Create Application Insights for the function app
 resource "azurerm_application_insights" "function" {
-  name                = "ignite-tf-function-insights"
+  name                = "ignite-demo-function-insights"
   location            = "${azurerm_resource_group.k8s.location}"
   resource_group_name = "${azurerm_resource_group.k8s.name}"
   application_type    = "Web"
@@ -54,7 +54,7 @@ resource "azurerm_application_insights" "function" {
 
 # Create the function app
 resource "azurerm_function_app" "function" {
-  name                      = "ignitek8sdemo${random_id.function.hex}"
+  name                      = "ignitedemo${random_id.function.hex}"
   location                  = "${azurerm_resource_group.k8s.location}"
   resource_group_name       = "${azurerm_resource_group.k8s.name}"
   app_service_plan_id       = "${azurerm_app_service_plan.function.id}"

@@ -23,15 +23,15 @@ variable "ssh_public_key" {
 }
 
 variable "dns_prefix" {
-  default = "k8stest"
+  default = "ignitek8sdemo"
 }
 
 variable "cluster_name" {
-  default = "k8stest"
+  default = "ignite-k8s-demo-cluster"
 }
 
 variable "resource_group_name" {
-  default = "ignite-azure-k8stest"
+  default = "ignite-k8s-demo-resource-group"
 }
 
 variable location {
