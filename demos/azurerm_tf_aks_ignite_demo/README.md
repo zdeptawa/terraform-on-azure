@@ -20,6 +20,17 @@ To use/test this code, do the following:
 5. Run `terraform plan` to plan the changes and build the dependency graphs required. This will also allow you to see what changes will occur before applying.
 6. **ONLY IF ALL LOOKS WELL ON THE PLAN**, run `terraform apply` to apply your changes.
 
+What this looks like on the command line:
+
+```
+$ . ../ignite_env_vars.sh                                            # sourcing azure creds file to export them as environment variables
+$ git clone https://github.com/zdeptawa/terraform-on-azure.git       # cloning the repository
+$ cd terraform-on-azure/demos/azurerm_tf_aks_ignite_demo             # changing directory to the demo folder
+$ terraform init                                                     # initializing terraform
+$ terraform plan -out out.plan                                       # creating a terraform plan file
+$ terraform apply out.plan                                           # applying the terraform plan from the file
+```
+
 # Sample Script For Exporting Azure Authentication Credentials as Environment Variables
 Here is a sample script for Linux/MacOS that you can source to export your authentication credentials as environment variables that will be seen and used by Terraform. Be sure to not store this file in your repository as it contains sensitive authentication information for your account!
 
