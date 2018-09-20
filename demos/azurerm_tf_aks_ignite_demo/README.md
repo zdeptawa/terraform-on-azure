@@ -8,7 +8,23 @@ Before you can use this code, you'll need to gather and configure your Azure Aut
 
 You will also need Terraform and Git installed on your system. If you don't yet have Terraform installed, [this guide will help you get it set up](https://www.terraform.io/intro/getting-started/install.html). If you still need to install Git, [you can download it here](https://git-scm.com/downloads).
 
-This demo code also requires an Azure Storage 
+# Sample Script For Exporting Azure Authentication Credentials as Environment Variables
+If you'd like to export your Microsoft Azure credentials as environment variables that Terraform can use, you can do so on Linux/MacOS by sourcing a simple script like the one found below. **WARNING** - be sure to not store this file in your repository as it contains sensitive authentication information for your account! **WARNING**
+
+```
+#!/bin/sh
+
+export ARM_CLIENT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+export ARM_CLIENT_SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+export ARM_SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+export ARM_TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+export ARM_ENVIRONMENT="public"
+
+export TF_VAR_client_id=${ARM_CLIENT_ID}
+export TF_VAR_client_secret=${ARM_CLIENT_SECRET}
+export TF_VAR_subscription_id=${ARM_SUBSCRIPTION_ID}
+export TF_VAR_tenant_id=${ARM_TENANT_ID}
+```
 
 # Usage
 To use/test this code, do the following:
@@ -30,25 +46,6 @@ $ terraform init                                                # initializing t
 $ terraform plan -out out.plan                                  # creating terraform plan file
 $ terraform apply out.plan                                      # applying terraform plan from file
 ```
-
-# Sample Script For Exporting Azure Authentication Credentials as Environment Variables
-Here is a sample script for Linux/MacOS that you can source to export your authentication credentials as environment variables that will be seen and used by Terraform. Be sure to not store this file in your repository as it contains sensitive authentication information for your account!
-
-```
-#!/bin/sh
-
-export ARM_CLIENT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export ARM_CLIENT_SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export ARM_SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export ARM_TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export ARM_ENVIRONMENT="public"
-
-export TF_VAR_client_id=${ARM_CLIENT_ID}
-export TF_VAR_client_secret=${ARM_CLIENT_SECRET}
-export TF_VAR_subscription_id=${ARM_SUBSCRIPTION_ID}
-export TF_VAR_tenant_id=${ARM_TENANT_ID}
-```
-
 # More Information
 Docs on Terraform.io -> [https://www.terraform.io/docs/providers/azurerm/](https://www.terraform.io/docs/providers/azurerm/)
 
