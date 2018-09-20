@@ -1,9 +1,3 @@
-variable "terraform_backend" {
-  # Changes the backend for tracking state. Use "azurerm" if you'd like to track stage in an Azure Storage Container.
-  # default = "azurerm"
-  default = "local"
-}
-
 variable "client_id" {
   default = ""
 }

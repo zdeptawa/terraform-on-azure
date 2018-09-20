@@ -4,6 +4,7 @@ provider "azurerm" {
 }
 
 # Configuring the backend
+# Use "azurerm" if you'd like to use a Terraform Storage Container as the backend
 terraform {
-  backend "${var.terraform_backend}" {}
+  backend "local" {}
 }
