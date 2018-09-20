@@ -23,12 +23,12 @@ To use/test this code, do the following:
 What this looks like on the command line:
 
 ```
-$ . ../ignite_env_vars.sh                                            # sourcing azure creds file to export them as environment variables
-$ git clone https://github.com/zdeptawa/terraform-on-azure.git       # cloning the repository
-$ cd terraform-on-azure/demos/azurerm_tf_aks_ignite_demo             # changing directory to the demo folder
-$ terraform init                                                     # initializing terraform
-$ terraform plan -out out.plan                                       # creating a terraform plan file
-$ terraform apply out.plan                                           # applying the terraform plan from the file
+$ . ../ignite_env_vars.sh                                       # sourcing creds file to export as env vars
+$ git clone https://github.com/zdeptawa/terraform-on-azure.git  # cloning repository
+$ cd terraform-on-azure/demos/azurerm_tf_aks_ignite_demo        # changing directory to demo folder
+$ terraform init                                                # initializing terraform
+$ terraform plan -out out.plan                                  # creating terraform plan file
+$ terraform apply out.plan                                      # applying terraform plan from file
 ```
 
 # Sample Script For Exporting Azure Authentication Credentials as Environment Variables
