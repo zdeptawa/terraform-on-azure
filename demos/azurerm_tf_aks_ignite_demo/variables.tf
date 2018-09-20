@@ -35,5 +35,9 @@ variable "resource_group_name" {
 }
 
 variable location {
-  default = "East US 2"
+  default = "East US"
+}
+
+variable function_app_content_zip_url {
+  default = "https://github.com/zdeptawa/terraform-on-azure/raw/ignite-demo/demos/azurerm_tf_aks_ignite_demo/sample_data/ignite-tf-function-app-content.zip"
 }
