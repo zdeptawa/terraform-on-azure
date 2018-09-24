@@ -23,7 +23,7 @@ resource "azurerm_storage_account" "function" {
 
 # Create a new service plan for our function app
 resource "azurerm_app_service_plan" "function" {
-  name                = "ignite-demo-function-service-plan"
+  name                = "ignite-function-service-plan"
   location            = "${azurerm_resource_group.k8s.location}"
   resource_group_name = "${azurerm_resource_group.k8s.name}"
   kind                = "FunctionApp"
@@ -41,7 +41,7 @@ resource "azurerm_app_service_plan" "function" {
 
 # Create Application Insights for the function app
 resource "azurerm_application_insights" "function" {
-  name                = "ignite-demo-function-insights"
+  name                = "ignite-function-insights"
   location            = "${azurerm_resource_group.k8s.location}"
   resource_group_name = "${azurerm_resource_group.k8s.name}"
   application_type    = "Web"
