@@ -1,3 +1,4 @@
+
 # Set up the provider for k8s
 provider "kubernetes" {
   host = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
@@ -13,13 +14,17 @@ provider "kubernetes" {
 # Create the k8s nginx pod
 resource "kubernetes_pod" "ignite-pod" {
   metadata {
-    name = "ignite-k8s-nginx-pod"
+    name = "ignite-k8s-nginx-demo"
+
+    labels {
+      name = "nginx"
+    }
   }
 
   spec {
     container {
       image = "nginx:1.7.9"
-      name  = "example"
+      name  = "nginx"
     }
   }
 }
@@ -27,12 +32,12 @@ resource "kubernetes_pod" "ignite-pod" {
 # Create the k8s nginx web service
 resource "kubernetes_service" "ignite-web" {
   metadata {
-    name = "ignite-k8s-nginx-service"
+    name = "ignite-k8s-nginx-demo"
   }
 
   spec {
     selector {
-      name = "${kubernetes_pod.ignite-pod.metadata.0.name}"
+      name = "${kubernetes_pod.ignite-pod.metadata.0.labels.name}"
     }
 
     session_affinity = "ClientIP"
