@@ -26,12 +26,24 @@ output "host" {
   value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
 }
 
+output "k8s_nginx_lb_ip" {
+  value = "${kubernetes_service.ignite-web.load_balancer_ingress.0.ip}"
+}
+
 output "configure" {
   value = <<CONFIGURE
 Run the following commands to configure kubernetes client:
 $ terraform output kube_config > ~/.kube/aksconfig
 $ export KUBECONFIG=~/.kube/aksconfig
 Test configuration using kubectl
-$ kubectl get nodes
+$ kubectl config view # view current kubectl context
+$ kubectl get nodes # view k8s nodes
+$ kubectl get services # view k8s services
+Set up kubectl proxy
+$ kubectl proxy
+$ open 'http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/overview?namespace=default'
+
 CONFIGURE
 }
+
+
