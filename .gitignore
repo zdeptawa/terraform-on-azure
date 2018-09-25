@@ -9,3 +9,6 @@
 out.plan
 run.plan
 *.plan
+
+# .ssh directory from terraform build
+*.ssh
