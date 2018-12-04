@@ -42,8 +42,17 @@ $ kubectl get services # view k8s services
 Set up kubectl proxy
 $ kubectl proxy
 $ open 'http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/overview?namespace=default'
+You can also connect using the azcli:
 
 CONFIGURE
 }
 
+output "az_cli" {
+  value = <<CONFIGURE
+Run the following commands to connect to the k8s dashboard with the az cli:
+$ az aks install-cli  # installs kubectl if needed
+$ az aks get-credentials --resource-group k8s-demo-resource-group --name k8s-demo-cluster  # gets credentials
+$ az aks browse --resource-group k8s-demo-resource-group --name k8s-demo-cluster  # opens dashboard
 
+CONFIGURE
+}
