@@ -51,19 +51,19 @@ When you run `vault`, you should see usage and command output from the binary. Y
 version of Vault that you're working with. If either of these commands fail and you receive an error saying the binary could not
 be found, double check that your `PATH` contains the directory where you've installed the `vault` binary.
 
-PIC `vault version`
+![vault version](3_vault_version.png)
 
 Vault is now installed! As a bonus, if you're running Bash, ZSH, or Fish, you can install command-line tab completion for Vault. To
 do so, simply run `vault -autocomplete-install` and restart your terminal or reload your shell. Once done, you can use `vault <tab>`
 to see suggestions of options to run.
 
-PIC `vault autocomplete-install`
+![vault autocomplete install](4_vault_autocomplete_install.png)
 
 Now that we have Vault installed we can start the dev server. Being Vault doesn't fork, I'm going to start the dev server in a screen
 session. You can alternatively start it in your current terminal and open a separate session if you'd prefer. The command to start
 the Vault dev server is `vault server -dev`.
 
-PIC `screen` starting vault
+![starting vault dev server](5_starting_vault_dev_server.png)
 
 You can see that we now have a running Vault dev server! I'm going to save three pieces of information from this screen session
 before I detach from my screen session - the `export VAULT_ADDR` line, the `Unseal Key`, and the `Root Token`. The 
@@ -71,7 +71,7 @@ before I detach from my screen session - the `export VAULT_ADDR` line, the `Unse
 as `VAULT_DEV_ROOT_TOKEN_ID` for use with the client. Once we've exported those two values, a `vault status` will confirm that 
 we can now connect to the running Vault dev server!
 
-PIC exporting values and vault status
+![exporting values and vault status](6_exporting_values_vault_status.png)
 
 Congrats! You've got a running Vault dev server! Let's try storing a secret. When a secret is written to Vault, it is first
 encrypted and then written to Vault's back-end storage. For the Vault dev server, back-end storage is only in-memory - but a 
