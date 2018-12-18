@@ -83,35 +83,35 @@ have the capability of decrypting it without Vault interaction. To write a secre
 secret and key pair names you choose moving forward with this guide. You also want to make sure you prefix your secret name with
 `secret/` as this is where arbitrary secrets can be stored and accessed.
 
-PIC `vault kv put` command
+![vault kv put](7_first_kv_put.png)
 
 Success! You can see from the output that Vault has stored my new secret. Let's run `vault kv get` to see what it stored.
 
-PIC `vault kv get` command
+![vault kv get](8_first_kv_get.png)
 
 The `vault kv get` command shows us what is stored in the secret - but it also shows us some metadata as well that covers when
 the secret was created as well as the version of that secret. Let's change the value of our secret.
 
-PIC `vault kv put` second command
+![vault kv put](9_second_kv_put.png)
 
 As you can see, I've changed to a new key `dev` with a value of `ops` in my `secret/vault`. You can also see it incremented the 
 version of this secret. Let's see what a `vault kv get` shows now.
 
-PIC `vault kv get` second command
+![vault kv get](10_second_kv_get.png)
 
 We can see that it completely overwrote this secret and my `isawesome=totesobvi` key is no longer there. What if I wanted to store
 both key pairs in this secret? Let's try a `vault kv put` with both key pairs with a `vault kv get` just after.
 
-PIC `vault kv put and vault kv get` third command
+![vault kv put and get](11_third_kv_put_get.png)
 
 As you can see, Vault has incremented the version of my secret and now shows both key pairs under the same secret. You can also
 set a format switch if you'd like to have the output in a format like JSON.
 
-PIC `vault kv get -format=JSON`
+![vault kv get json format](12_kv_get_json.png)
 
 If we want to delete a secret, we can do so with `vault kv delete`. Let's do that now.
 
-PIC `vault kv delete`
+![vault kv delete](13_kv_delete.png)
 
 As you can see from the `vault kv get` command, the secret is now deleted and shows a deletion time. For this getting started 
 example, we've been using the Key/Value (kv for short) secrets engine - but there are many different secrets engines you can
