@@ -45,7 +45,7 @@ start by logging into this server and installing Vault there. You'll want to mak
 For my example, I've simply moved the `vault` binary into `/usr/local` as it was already in my `PATH`. You could also symlink there
 instead if you'd like, but this was a quick and effective option for my purposes here.
 
-PIC installing vault on Linux server
+![install vault on linux](2_install_vault_linux.png)
 
 When you run `vault`, you should see usage and command output from the binary. You can also run `vault version` to see the current
 version of Vault that you're working with. If either of these commands fail and you receive an error saying the binary could not
