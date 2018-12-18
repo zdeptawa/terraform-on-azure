@@ -34,7 +34,7 @@ our HashiCorp Vault dev server up and running!
 
 I've installed Vault locally on my Mac using Homebrew (https://brew.sh). 
 
-PIC `brew install vault` 
+[brew install vault](1_brew_install_vault.png)
 
 Vault is available for Windows, Linux, and Mac (among other OSes) as a simple binary. The downloads for Vault can be found here: 
 https://www.vaultproject.io/downloads.html 
