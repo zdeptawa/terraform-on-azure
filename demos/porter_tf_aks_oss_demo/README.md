@@ -94,7 +94,7 @@ export TF_VAR_backend_storage_container=<BACKEND_STORAGE_CONTAINER_NAME>
 export TF_VAR_backend_storage_access_key=<BACKEND_STORAGE_ACCOUNT_ACCESS_KEY>
 ```
 
-### Generate a CNAB CNAB credential set
+### Generate a CNAB credential set
 
 A CNAB defines one or more `credentials` in the `bundle.json`. In this exercise, we defined these in our `porter.yaml` and the resulting `bundle.json` contains the credential definitions. Before we can install the bundle, we need to create something called a `credential set` that specifies how to map our Service Principal information into these `credentials`. We'll use Porter to do that:
 
