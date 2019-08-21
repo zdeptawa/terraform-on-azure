@@ -10,13 +10,3 @@ terraform {
     required_version = "~>0.11"
     backend "azurerm" {}
 }
-
-resource "azurerm_resource_group" "demo01_resource_group" {
-  name     = "demo01_resource_group"
-  location = "eastus"
-
-  tags {
-    environment = "${var.environment_tag}"
-    build       = "${var.build_tag}"
-  }
-}
