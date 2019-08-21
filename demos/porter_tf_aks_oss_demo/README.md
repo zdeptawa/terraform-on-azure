@@ -61,7 +61,7 @@ Once you run this command, it will output a table similar to this:
 ```
 AppId                                 DisplayName         Name                       Password                              Tenant
 ------------------------------------  ------------------  -------------------------  ------------------------------------  ------------------------------------
-<some value>                          oss-demo            http://oss-demo      <some value>                            <some value>
+<some value>                          oss-demo            http://oss-demo            <some value>                          <some value>
 ```
 
 Copy these values and move on to setting up your environment variables.
