@@ -4,48 +4,55 @@
 # IMPORTANT: Make sure subscription_id, client_id, client_secret, and tenant_id are configured!
 
 # Configure the Azure Provider
-provider "azurerm" {}
+provider "azurerm" {
+  version = "~> 1.33"
+}
 
 # Create a resource group
 resource "azurerm_resource_group" "demo_resource_group" {
-  name     = "demo_lin_resource_group"
-  location = "westus2"
+  name     = "${var.resource_group_name}"
+  location = "${var.location}"
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
 # Create a virtual network within the resource group
-module "network" "demo_network" {
+module "network" {
   source              = "Azure/network/azurerm"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
   location            = "${azurerm_resource_group.demo_resource_group.location}"
-  address_space       = "10.0.0.0/16"
-  subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24"]
-  subnet_names        = ["demo_lin_public_subnet", "demo_lin_private_subnet"]
-  vnet_name           = "demo_lin_network"
+  address_space       = "${var.address_space}"
+  subnet_prefixes     = "${var.subnet_prefixes}"
+  subnet_names        = "${var.subnet_names}"
+  vnet_name           = "${var.vnet_name}"
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
 # Create a subnet within the network
 resource "azurerm_subnet" "demo_public_subnet" {
-  name                      = "demo_lin_public_subnet"
-  address_prefix            = "10.0.1.0/24"
-  resource_group_name       = "${azurerm_resource_group.demo_resource_group.name}"
-  virtual_network_name      = "demo_network"
+  depends_on            = ["module.network"]
+  name                  = "${var.public_subnet_name}"
+  address_prefix        = "${var.public_subnet_prefix}"
+  resource_group_name   = "${azurerm_resource_group.demo_resource_group.name}"
+  virtual_network_name  = "${var.vnet_name}"
+}
+
+resource "azurerm_subnet_network_security_group_association" "demo_security_group_association" {
+  subnet_id = "${azurerm_subnet.demo_public_subnet.id}"
   network_security_group_id = "${azurerm_network_security_group.demo_public_security_group.id}"
 }
 
 # Create a security group
 resource "azurerm_network_security_group" "demo_public_security_group" {
   depends_on          = ["module.network"]
-  name                = "demo_lin_public_security_group"
+  name                = "${var.public_security_group_name}"
   location            = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
@@ -61,54 +68,80 @@ resource "azurerm_network_security_group" "demo_public_security_group" {
     destination_address_prefix = "*"
   }
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  security_rule {
+    name                       = "demo_allow_ssh"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
+  }
+}
+
+# Create a public IP for the server
+resource "azurerm_public_ip" "demo_web_public_ip" {
+  name                = "demo_web_public_ip"
+  location            = "${var.location}"
+  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+  allocation_method   = "Static"
+
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
 # Create a network interface for the server
 resource "azurerm_network_interface" "demo_network_interface" {
-  name                      = "demo_lin_network_interface"
+  name                      = "${var.network_interface_name}"
   location                  = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name       = "${azurerm_resource_group.demo_resource_group.name}"
   network_security_group_id = "${azurerm_network_security_group.demo_public_security_group.id}"
 
   ip_configuration {
-    name                                    = "demo_lin_ip_configuration"
+    name                                    = "${var.ip_configuration_name}"
     subnet_id                               = "${azurerm_subnet.demo_public_subnet.id}"
     private_ip_address_allocation           = "dynamic"
     load_balancer_backend_address_pools_ids = ["${module.loadbalancer.azurerm_lb_backend_address_pool_id}"]
+    public_ip_address_id                    = "${azurerm_public_ip.demo_web_public_ip.id}"
   }
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
 # Create a managed disk for the server
 resource "azurerm_managed_disk" "demo_managed_disk" {
-  name                 = "demo_lin_managed_disk"
+  name                 = "${var.web_managed_disk_name}"
   location             = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name  = "${azurerm_resource_group.demo_resource_group.name}"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = "1023"
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
 # Create a web servrer
 resource "azurerm_virtual_machine" "demo_web01" {
-  name                  = "demo_lin_web01"
+  name                  = "${var.web_server_name}"
   location              = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name   = "${azurerm_resource_group.demo_resource_group.name}"
   network_interface_ids = ["${azurerm_network_interface.demo_network_interface.id}"]
-  vm_size               = "Standard_B1s"
+  vm_size               = "${var.web_vm_size}"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true
@@ -148,9 +181,9 @@ resource "azurerm_virtual_machine" "demo_web01" {
     disable_password_authentication = false
   }
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
@@ -170,27 +203,31 @@ resource "azurerm_virtual_machine_extension" "demo_web_build" {
     }
 SETTINGS
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
 
 # Create a loadbalancer
-module "loadbalancer" "demo_load_balancer" {
+module "loadbalancer" {
   source              = "Azure/loadbalancer/azurerm"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
   location            = "${azurerm_resource_group.demo_resource_group.location}"
-  prefix              = "demolin"
+  prefix              = "${var.lb_prefix}"
+
+  remote_port = {
+    ssh = ["Tcp", "22"]
+  }
 
   lb_port = {
     http = ["80", "Tcp", "80"]
   }
 
-  frontend_name = "demo-lin-public-vip"
+  frontend_name = "${var.lb_frontend_name}"
 
-  tags {
-    environment = "demo-app-lin"
-    build       = "devops-demo-app"
+  tags = {
+    environment = "${var.environment_tag}"
+    build       = "${var.build_tag}"
   }
 }
