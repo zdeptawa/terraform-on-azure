@@ -85,11 +85,11 @@ variable "db_server_name" {
 }
 
 variable "web_vm_size" {
-    default = "Standard_DS1_v2"
+    default = "Standard_D2s_v3"
 }
 
 variable "db_vm_size" {
-    default = "Standard_DS1_v2"
+    default = "Standard_D4s_v3"
 }
 
 variable "lb_prefix" {
