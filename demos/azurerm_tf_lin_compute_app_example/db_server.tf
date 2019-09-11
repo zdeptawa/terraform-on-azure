@@ -160,9 +160,10 @@ resource "azurerm_virtual_machine_extension" "demo_db_build" {
   type_handler_version = "2.0"
 
   # && export DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y mysql-server && mysqladmin -u root Password1234
+  # && DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
   settings = <<SETTINGS
     {
-        "commandToExecute": "sudo apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server"
+        "commandToExecute": "sudo apt-get update -y"
     }
 SETTINGS
 
