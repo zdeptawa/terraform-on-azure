@@ -13,7 +13,7 @@ resource "azurerm_resource_group" "demo01_resource_group" {
   name     = "demo01_resource_group"
   location = "westus2"
 
-  tags = { environment = "demo", build       = "demo01" }
+  tags = { environment = "demo", build = "demo01" }
 }
 
 # Create a virtual network within the resource group
@@ -33,5 +33,5 @@ resource "azurerm_virtual_network" "demo01_network" {
     address_prefix = "10.0.2.0/24"
   }
 
-  tags = { environment = "demo", build       = "demo01" }
+  tags = { environment = "demo", build = "demo01" }
 }

@@ -9,47 +9,43 @@ Use code to deploy a provided java application in a manner that is easily scalab
 */
 
 # Configure the Azure Provider
-provider "azurerm" {}
+provider "azurerm" {
+  features {}
+}
 
 # Create a resource group
 resource "azurerm_resource_group" "demo05_resource_group" {
   name     = "demo05_resource_group"
   location = "westus2"
 
-  tags {
-    environment = "demo"
-    build       = "demo05"
-  }
+  tags = { environment = "demo", build = "demo05" }
 }
 
-module "network" "demo05_network" {
+module "network" {
   source              = "Azure/network/azurerm"
-  resource_group_name = "${azurerm_resource_group.demo05_resource_group.name}"
-  location            = "${azurerm_resource_group.demo05_resource_group.location}"
+  resource_group_name = azurerm_resource_group.demo05_resource_group.name
+  location            = azurerm_resource_group.demo05_resource_group.location
   address_space       = "10.0.0.0/16"
   subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24"]
   subnet_names        = ["demo05_public_subnet", "demo05_private_subnet"]
   vnet_name           = "demo05_network"
 
-  tags {
-    environment = "demo"
-    build       = "demo05"
-  }
+  tags = { environment = "demo", build = "demo05" }
 }
 
 resource "azurerm_subnet" "demo05_public_subnet" {
   name                      = "demo05_public_subnet"
   address_prefix            = "10.0.1.0/24"
-  resource_group_name       = "${azurerm_resource_group.demo05_resource_group.name}"
+  resource_group_name       = azurerm_resource_group.demo05_resource_group.name
   virtual_network_name      = "demo05_network"
-  network_security_group_id = "${azurerm_network_security_group.demo05_public_security_group.id}"
+  network_security_group_id = azurerm_network_security_group.demo05_public_security_group.id
 }
 
 resource "azurerm_network_security_group" "demo05_public_security_group" {
-  depends_on          = ["module.network"]
+  depends_on          = [module.network]
   name                = "demo05_public_security_group"
-  location            = "${azurerm_resource_group.demo05_resource_group.location}"
-  resource_group_name = "${azurerm_resource_group.demo05_resource_group.name}"
+  location            = azurerm_resource_group.demo05_resource_group.location
+  resource_group_name = azurerm_resource_group.demo05_resource_group.name
 
   security_rule {
     name                       = "demo05_allow_web"
@@ -63,16 +59,13 @@ resource "azurerm_network_security_group" "demo05_public_security_group" {
     destination_address_prefix = "*"
   }
 
-  tags {
-    environment = "demo"
-    build       = "demo05"
-  }
+  tags = { environment = "demo", build = "demo05" }
 }
 
-module "loadbalancer" "demo05_load_balancer" {
+module "loadbalancer" {
   source              = "Azure/loadbalancer/azurerm"
-  resource_group_name = "${azurerm_resource_group.demo05_resource_group.name}"
-  location            = "${azurerm_resource_group.demo05_resource_group.location}"
+  resource_group_name = azurerm_resource_group.demo05_resource_group.name
+  location            = azurerm_resource_group.demo05_resource_group.location
   prefix              = "demo05"
 
   lb_port = {
@@ -87,18 +80,18 @@ module "loadbalancer" "demo05_load_balancer" {
   }
 }
 
-module "computegroup" "demo05_computegroup" {
+module "computegroup" {
   source                                 = "Azure/computegroup/azurerm"
   vmscaleset_name                        = "demo05_vmscaleset"
-  resource_group_name                    = "${azurerm_resource_group.demo05_resource_group.name}"
-  location                               = "${azurerm_resource_group.demo05_resource_group.location}"
+  resource_group_name                    = azurerm_resource_group.demo05_resource_group.name
+  location                               = azurerm_resource_group.demo05_resource_group.location
   vm_size                                = "Standard_B1S"
   admin_username                         = "azureuser"
   admin_password                         = "BestPasswordEver"
   ssh_key                                = "~/.ssh/id_rsa.pub"
   nb_instance                            = 3
-  vnet_subnet_id                         = "${module.network.vnet_subnets[0]}"
-  load_balancer_backend_address_pool_ids = "${module.loadbalancer.azurerm_lb_backend_address_pool_id}"
+  vnet_subnet_id                         = module.network.vnet_subnets[0]
+  load_balancer_backend_address_pool_ids = module.loadbalancer.azurerm_lb_backend_address_pool_id
 
   #vm_os_simple                           = "UbuntuServer"
 
@@ -111,5 +104,5 @@ module "computegroup" "demo05_computegroup" {
 }
 
 output "azurerm_public_ip_address" {
-  value = "${module.loadbalancer.azurerm_public_ip_address}"
+  value = module.loadbalancer.azurerm_public_ip_address
 }
