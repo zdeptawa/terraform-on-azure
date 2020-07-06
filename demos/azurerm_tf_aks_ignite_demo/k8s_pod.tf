@@ -14,8 +14,7 @@ provider "kubernetes" {
 # Create the k8s nginx pod
 resource "kubernetes_pod" "ignite-pod" {
   metadata {
-    name = "ignite-k8s-nginx-demo"
-
+    name = "ignite-nginx-pod"
     labels {
       name = "nginx"
     }
@@ -32,7 +31,7 @@ resource "kubernetes_pod" "ignite-pod" {
 # Create the k8s nginx web service
 resource "kubernetes_service" "ignite-web" {
   metadata {
-    name = "ignite-k8s-nginx-demo"
+    name = "ignite-nginx-service"
   }
 
   spec {

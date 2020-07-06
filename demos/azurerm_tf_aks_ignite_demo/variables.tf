@@ -11,7 +11,7 @@ variable "environment_tag" {
 }
 
 variable "build_tag" {
-  default = "ignite"
+  default = "ignite-demo"
 }
 
 variable "agent_count" {
@@ -27,11 +27,11 @@ variable "dns_prefix" {
 }
 
 variable "cluster_name" {
-  default = "ignite-k8s-demo-cluster"
+  default = "ignite-demo-cluster"
 }
 
 variable "resource_group_name" {
-  default = "ignite-k8s-demo-resource-group"
+  default = "ignite-demo-resource-group"
 }
 
 variable location {
