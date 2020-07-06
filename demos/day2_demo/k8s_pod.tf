@@ -12,9 +12,10 @@ provider "kubernetes" {
 }
 
 # Create the k8s nginx pod
-resource "kubernetes_pod" "ignite-pod" {
+resource "kubernetes_pod" "nginx-pod" {
   metadata {
-    name = "ignite-nginx-pod"
+    name = "nginx-demo-pod"
+
     labels {
       name = "nginx"
     }
@@ -29,14 +30,14 @@ resource "kubernetes_pod" "ignite-pod" {
 }
 
 # Create the k8s nginx web service
-resource "kubernetes_service" "ignite-web" {
+resource "kubernetes_service" "nginx-service" {
   metadata {
-    name = "ignite-nginx-service"
+    name = "nginx-demo-service"
   }
 
   spec {
     selector {
-      name = "${kubernetes_pod.ignite-pod.metadata.0.labels.name}"
+      name = "${kubernetes_pod.nginx-pod.metadata.0.labels.name}"
     }
 
     session_affinity = "ClientIP"

@@ -4,25 +4,24 @@
 # IMPORTANT: Make sure subscription_id, client_id, client_secret, and tenant_id are configured!
 
 # Configure the Azure Provider
-provider "azurerm" {}
+provider "azurerm" {
+  features {}
+}
 
 # Create a resource group
 resource "azurerm_resource_group" "demo01_resource_group" {
   name     = "demo01_resource_group"
   location = "westus2"
 
-  tags {
-    environment = "demo"
-    build       = "demo01"
-  }
+  tags = { environment = "demo", build = "demo01" }
 }
 
 # Create a virtual network within the resource group
 resource "azurerm_virtual_network" "demo01_network" {
   name                = "demo01_network"
   address_space       = ["10.0.0.0/16"]
-  location            = "${azurerm_resource_group.demo01_resource_group.location}"
-  resource_group_name = "${azurerm_resource_group.demo01_resource_group.name}"
+  location            = azurerm_resource_group.demo01_resource_group.location
+  resource_group_name = azurerm_resource_group.demo01_resource_group.name
 
   subnet {
     name           = "demo01_public_subnet"
@@ -34,8 +33,5 @@ resource "azurerm_virtual_network" "demo01_network" {
     address_prefix = "10.0.2.0/24"
   }
 
-  tags {
-    environment = "demo"
-    build       = "demo01"
-  }
+  tags = { environment = "demo", build = "demo01" }
 }

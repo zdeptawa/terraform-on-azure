@@ -11,7 +11,7 @@ variable "environment_tag" {
 }
 
 variable "build_tag" {
-  default = "ignite-demo"
+  default = "k8sdemo"
 }
 
 variable "agent_count" {
@@ -23,21 +23,17 @@ variable "admin_username" {
 }
 
 variable "dns_prefix" {
-  default = "ignitek8sdemo"
+  default = "k8sdemo"
 }
 
 variable "cluster_name" {
-  default = "ignite-demo-cluster"
+  default = "k8s-demo-cluster"
 }
 
 variable "resource_group_name" {
-  default = "ignite-demo-resource-group"
+  default = "k8s-demo-resource-group"
 }
 
 variable location {
   default = "East US"
-}
-
-variable function_app_content_zip_url {
-  default = "https://github.com/zdeptawa/terraform-on-azure/raw/ignite-demo/demos/azurerm_tf_aks_ignite_demo/sample_data/ignite-tf-function-app-content.zip"
 }
