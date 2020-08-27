@@ -13,3 +13,6 @@ run.plan
 
 # .ssh directory from terraform build
 *.ssh
+
+# Environment Variable File
+*env_var.sh
