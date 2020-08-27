@@ -1,7 +1,14 @@
+# This is an example of a basic Terraform configuration file that sets up a new demo resource group,
+# a new demo network, and a new demo linux server with nginx running and accessible via port 80.
+
+# IMPORTANT: Make sure subscription_id, client_id, client_secret, and tenant_id are configured!
+
+# Configure the Azure Provider
 provider "azurerm" {
   features {}
 }
 
+# Create a resource group
 resource "azurerm_resource_group" "azfunbytes_resource_group" {
   name     = "azfunbytes_demo"
   location = "East US 2"
@@ -9,6 +16,7 @@ resource "azurerm_resource_group" "azfunbytes_resource_group" {
   tags     = { environment = "demo", build = "azfunbytes" }
 }
 
+# Create a network
 resource "azurerm_virtual_network" "azfunbytes_network" {
   name                = "azfunbytes-network"
   address_space       = ["10.0.0.0/16"]
@@ -17,6 +25,7 @@ resource "azurerm_virtual_network" "azfunbytes_network" {
   tags     = { environment = "demo", build = "azfunbytes" }
 }
 
+# Create a subnet
 resource "azurerm_subnet" "azfunbytes_internal_subnet" {
   name                 = "azfunbytes_internal"
   resource_group_name  = azurerm_resource_group.azfunbytes_resource_group.name
@@ -24,6 +33,7 @@ resource "azurerm_subnet" "azfunbytes_internal_subnet" {
   address_prefixes     = [ "10.0.2.0/24" ]
 }
 
+# Create a security group to allow port 80 access
 resource "azurerm_network_security_group" "azfunbytes_sg" {
     name                = "azfunbytes_security_group"
     location            = azurerm_resource_group.azfunbytes_resource_group.location
@@ -44,6 +54,7 @@ resource "azurerm_network_security_group" "azfunbytes_sg" {
     tags = { environment = "demo", build = "azfunbytes" }
 }
 
+# Create a public IP for our virtual machine
 resource "azurerm_public_ip" "azfunbytes_public_ip" {
     name                         = "azfunbytes_public_ip"
     location                     = azurerm_resource_group.azfunbytes_resource_group.location
@@ -53,6 +64,7 @@ resource "azurerm_public_ip" "azfunbytes_public_ip" {
     tags = { environment = "demo", build = "azfunbytes" }
 }
 
+# Create a network interface for our virtual machine with both a private and public IP
 resource "azurerm_network_interface" "azfunbytes_interface" {
   name                = "azfunbytes-nic"
   location            = azurerm_resource_group.azfunbytes_resource_group.location
@@ -68,11 +80,13 @@ resource "azurerm_network_interface" "azfunbytes_interface" {
   tags     = { environment = "demo", build = "azfunbytes" }
 }
 
+# Associate our network interface with the security group we created to allow port 80 access
 resource "azurerm_network_interface_security_group_association" "azfunbytes_sg_assoc" {
     network_interface_id      = azurerm_network_interface.azfunbytes_interface.id
     network_security_group_id = azurerm_network_security_group.azfunbytes_sg.id
 }
 
+# Create our linux VM, assigning the proper network interface
 resource "azurerm_linux_virtual_machine" "azfunbytes_linux_vm" {
   name                = "azfunbytes-linux-machine"
   resource_group_name = azurerm_resource_group.azfunbytes_resource_group.name
@@ -103,6 +117,7 @@ resource "azurerm_linux_virtual_machine" "azfunbytes_linux_vm" {
   tags     = { environment = "demo", build = "azfunbytes" }
 }
 
+# Run a sample script to update the server and install nginx after it's done building
 resource "azurerm_virtual_machine_extension" "azfunbytes_vm_web_build" {
   name                 = "azfunbytes_vm_web_build"
   virtual_machine_id   = azurerm_linux_virtual_machine.azfunbytes_linux_vm.id
