@@ -47,9 +47,9 @@ variable "resource_group_name_west" {
 }
 
 variable "location_east" {
-  default = "East US"
+  default = "eastus2"
 }
 
 variable "location_west" {
-  default = "West US"
+  default = "westus2"
 }

@@ -1,39 +1,72 @@
-output "client_key" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.client_key}"
+# East US AKS Cluster Info
+output "client_key_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config.0.client_key}"
 }
 
-output "client_certificate" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.client_certificate}"
+output "client_certificate_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config.0.client_certificate}"
 }
 
-output "cluster_ca_certificate" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.cluster_ca_certificate}"
+output "cluster_ca_certificate_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config.0.cluster_ca_certificate}"
 }
 
-output "cluster_username" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.username}"
+output "cluster_username_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config.0.username}"
 }
 
-output "cluster_password" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.password}"
+output "cluster_password_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config.0.password}"
 }
 
-output "kube_config" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config_raw}"
+output "kube_config_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config_raw}"
 }
 
-output "host" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
+output "host_east" {
+  value = "${azurerm_kubernetes_cluster.k8s_east.kube_config.0.host}"
+}
+
+# West US AKS Cluster Info
+output "client_key_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config.0.client_key}"
+}
+
+output "client_certificate_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config.0.client_certificate}"
+}
+
+output "cluster_ca_certificate_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config.0.cluster_ca_certificate}"
+}
+
+output "cluster_username_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config.0.username}"
+}
+
+output "cluster_password_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config.0.password}"
+}
+
+output "kube_config_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config_raw}"
+}
+
+output "host_west" {
+  value = "${azurerm_kubernetes_cluster.k8s_west.kube_config.0.host}"
 }
 
 #output "k8s_nginx_lb_ip" {
 #  value = "${kubernetes_service.nginx-service.load_balancer_ingress.0.ip}"
 #}
 
-output "configure" {
+output "configure_east" {
   value = <<CONFIGURE
-Run the following commands to configure kubernetes client:
-$ terraform output kube_config > ~/.kube/aksconfig
+Run the following commands to configure the kubernetes client for the east cluster:
+$ terraform output kube_config_east > ~/.kube/aksconfig
+$ export KUBECONFIG=~/.kube/aksconfig
+Run the following commands to configure the kubernetes client for the west cluster:
+$ terraform output kube_config_east > ~/.kube/aksconfig
 $ export KUBECONFIG=~/.kube/aksconfig
 Test configuration using kubectl
 $ kubectl config view # view current kubectl context
@@ -49,10 +82,14 @@ CONFIGURE
 
 output "az_cli" {
   value = <<CONFIGURE
-Run the following commands to connect to the k8s dashboard with the az cli:
+Run the following commands to connect to the k8s-east dashboard with the az cli:
 $ az aks install-cli  # installs kubectl if needed
-$ az aks get-credentials --resource-group k8s-demo-resource-group --name k8s-demo-cluster  # gets credentials
-$ az aks browse --resource-group k8s-demo-resource-group --name k8s-demo-cluster  # opens dashboard
+$ az aks get-credentials --resource-group k8s-demo-resource-group-east --name k8s-demo-cluster-east  # gets credentials
+$ az aks browse --resource-group k8s-demo-resource-group-east --name k8s-demo-cluster-east  # opens dashboard
+Run the following commands to connect to the k8s-west dashboard with the az cli:
+$ az aks install-cli  # installs kubectl if needed
+$ az aks get-credentials --resource-group k8s-demo-resource-group-west --name k8s-demo-cluster-west  # gets credentials
+$ az aks browse --resource-group k8s-demo-resource-group-wes --name k8s-demo-cluster-west  # opens dashboard
 
 CONFIGURE
 }
