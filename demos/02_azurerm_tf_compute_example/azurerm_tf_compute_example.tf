@@ -37,10 +37,9 @@ resource "azurerm_resource_group" "demo02_resource_group" {
 #    environment = "demo", build = "demo02" }
 #}
 
-module "network" "demo02_network" {
+module "network" {
   source              = "Azure/network/azurerm"
   resource_group_name = azurerm_resource_group.demo02_resource_group.name
-  location            = azurerm_resource_group.demo02_resource_group.location
   address_space       = "10.0.0.0/16"
   subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24"]
   subnet_names        = ["demo02_public_subnet", "demo02_private_subnet"]
@@ -51,10 +50,10 @@ module "network" "demo02_network" {
 
 resource "azurerm_subnet" "demo02_public_subnet" {
   name                      = "demo02_public_subnet"
-  address_prefix            = "10.0.1.0/24"
+  address_prefixes          = { "10.0.1.0/24" }
   resource_group_name       = azurerm_resource_group.demo02_resource_group.name
   virtual_network_name      = "demo02_network"
-  network_security_group_id = azurerm_network_security_group.demo02_public_security_group.id
+  #network_security_group_id = azurerm_network_security_group.demo02_public_security_group.id
 }
 
 resource "azurerm_network_security_group" "demo02_public_security_group" {
@@ -157,7 +156,7 @@ resource "azurerm_virtual_machine_extension" "demo02_web_build" {
   name                 = "demo02_web_build"
   location             = azurerm_resource_group.demo02_resource_group.location
   resource_group_name  = azurerm_resource_group.demo02_resource_group.name
-  virtual_machine_name = azurerm_virtual_machine.demo02_web01.name
+  virtual_machine_id   = azurerm_virtual_machine.demo02_web01.name
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
   type_handler_version = "2.0"
@@ -171,7 +170,7 @@ SETTINGS
   tags = { environment = "demo", build = "demo02" }
 }
 
-module "loadbalancer" "demo02_load_balancer" {
+module "loadbalancer" {
   source              = "Azure/loadbalancer/azurerm"
   resource_group_name = azurerm_resource_group.demo02_resource_group.name
   location            = azurerm_resource_group.demo02_resource_group.location
@@ -183,5 +182,5 @@ module "loadbalancer" "demo02_load_balancer" {
 
   frontend_name = "demo02-public-vip"
 
-  tags { environment = "demo", build = "demo02" }
+  tags = { environment = "demo", build = "demo02" }
 }
