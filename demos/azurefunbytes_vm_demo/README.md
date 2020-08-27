@@ -1,5 +1,5 @@
-# terraform-on-azure - demo03
-Very basic sample Terraform configuration using the AzureRM Terraform Provider. 
+# terraform-on-azure - azurefunbytes_vm_demo
+ This is an example of a basic Terraform configuration file that sets up a demo resource group, a demo network, and a demo linux server with nginx running and accessible via port 80.
 
 # Prerequisites
 Before you can use this code, you'll need to gather and configure your Azure Authentication info(`client_id`, `client_secret`, `tenant_id`, `subscription_id`). While you can use your own personal authentication information, it is suggested that you use an Azure Service Principal instead. [How to create a Service Principal for use with Terraform can be found here](https://www.terraform.io/docs/providers/azurerm/authenticating_via_service_principal.html). 
