@@ -49,4 +49,4 @@ $ terraform apply out.plan                                      # applying terra
 # More Information
 Docs on Terraform.io -> [https://www.terraform.io/docs/providers/azurerm/](https://www.terraform.io/docs/providers/azurerm/)
 
-Docs on Microsoft -> [https://aka.ms/tfhub](https://aka.ms/tfhub)
+Docs on Microsoft -> [https://aka.ms/az-tf-docs](https://aka.ms/az-tf-docs)
