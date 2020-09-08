@@ -11,7 +11,7 @@ provider "azurerm" {
 # Create a resource group
 resource "azurerm_resource_group" "azfunbytes_resource_group" {
   name     = "azfunbytes_demo"
-  location = "East US 2"
+  location = "West US 2"
 
   tags     = { environment = "demo", build = "azfunbytes" }
 }
