@@ -1,6 +1,6 @@
 # Setting the provider
 provider "azurerm" {
-  version = "~>1.5"
+  features {}
 }
 
 # Configuring the backend
